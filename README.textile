@@ -1,0 +1,58 @@
+h1. NAME
+
+ZenIRCBot - Perl API for ZenIRCBot
+
+h1. SYNOPSIS
+
+<pre>
+  use ZenIRCBot;
+
+  my $bot = ZenIRCBot->new();
+  $bot->register_commands('ZenIRCBot::Test', [
+      { name => 'foo', description => 'Returns bar' }
+  ]);
+
+  $bot->subscribe(sub {
+      my ($msg, $channel) = @_;
+      
+      if ($msg->{version} == 1 and $msg->{type} eq 'privmsg') {
+          if ($msg->{data}->{message} =~ m/foo/) {
+              $bot->send_privmsg(
+                  $msg->{data}->{channel},
+                  sprintf("%s: bar", $msg->{data}->{sender})
+              );
+          }
+      }
+  });
+
+  $bot->run;
+</pre>
+
+h1. DESCRIPTION
+
+Perl API for ZenIRCBot.
+
+h1. METHODS
+
+h2. Standard API Methods
+
+See the ZenIRCBot documentation for more information.
+
+h2. subscribe($func)
+
+Set callback for redis publish events.
+
+h3. callback($message, $channel)
+
+The callback function is called on Redis subscribe events, with the message hashref and channel name.
+
+h1. SEE ALSO
+
+ZenIRCBot
+
+ZenIRCBot Documentation
+
+h1. AUTHOR
+
+Anthony Johnson @<aj@ohess.org>@
+

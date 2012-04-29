@@ -5,3 +5,4 @@ MYMETA
 ^MANIFEST\.
 .bak$
 ^ZenIRCBot.*.tar.gz$
+^contrib/
