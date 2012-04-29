@@ -1,0 +1,7 @@
+\.git
+MYMETA
+^Makefile.old$
+^Makefile$
+^MANIFEST\.
+.bak$
+^ZenIRCBot.*.tar.gz$
