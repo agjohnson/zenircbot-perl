@@ -9,6 +9,47 @@ our $VERSION = '0.01_01';
 use AnyEvent::Redis;
 use JSON;
 
+=head1 NAME
+
+ZenIRCBot - Perl API for ZenIRCBot
+
+=head1 SYNOPSIS
+
+  use ZenIRCBot;
+
+  my $bot = ZenIRCBot->new();
+  $bot->register_commands('ZenIRCBot::Test', [
+      { name => 'foo', description => 'Returns bar' }
+  ]);
+
+  $bot->subscribe(sub {
+      my ($msg, $channel) = @_;
+      
+      if ($msg->{version} == 1 and $msg->{type} eq 'privmsg') {
+          if ($msg->{data}->{message} =~ m/foo/) {
+              $bot->send_privmsg(
+                  $msg->{data}->{channel},
+                  sprintf("%s: bar", $msg->{data}->{sender})
+              );
+          }
+      }
+  });
+
+  $bot->run;
+
+=head1 DESCRIPTION
+
+Perl API for ZenIRCBot.
+
+=head1 METHODS
+
+=head2 Standard API Methods
+
+See the L<ZenIRCBot documentation|http://zenircbot.readthedocs.org/en/latest/index.html> 
+for more information.
+
+=cut
+
 sub new {
     my $class = shift;
     my $host = shift // 'localhost';
@@ -30,7 +71,18 @@ sub new {
 
 sub redis { return $_[0]->{redis}; }
 
-# Set subscribe callback
+
+=head2 subscribe($func)
+
+Set callback for redis publish events.
+
+=head3 callback($message, $channel)
+
+The callback function is called on Redis subscribe events, with the message
+hashref and channel name.
+
+=cut
+
 sub subscribe {
     my ($self, $func) = @_;
     die "Not a CODEREF" if (ref $func ne "CODE");
@@ -119,3 +171,15 @@ sub get_redis_client {
 }
 
 1;
+__END__
+
+=head1 SEE ALSO
+
+L<ZenIRCBot|http://github.com/wraithan/zenircbot>
+
+L<ZenIRCBot Documentation|http://zenircbot.readthedocs.org/en/latest/index.html>
+
+=head1 AUTHOR
+
+Anthony Johnson C<< <aj@ohess.org> >>
+
